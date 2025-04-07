@@ -46,38 +46,19 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start, // Alinea los widgets al inicio
           children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Padding(
+              padding: const EdgeInsets.only(top: 50.0), // Espaciado desde la parte superior
+              child: Image.asset(
+                'assets/tarija_app.JPG', // Ruta de la imagen en tu proyecto
+                width: 400, // Ajusta el ancho de la imagen
+                height: 350, // Ajusta la altura de la imagen
+                fit: BoxFit.cover, // Ajusta cómo se muestra la imagen
+              ),
             ),
           ],
         ),
-      ),
-      floatingActionButton: Stack(
-        children: [
-          Align(
-            alignment: Alignment.bottomLeft, // Posiciona el botón en la esquina inferior izquierda
-            child: FloatingActionButton(
-              onPressed: () {
-                // Acción para el botón inferior izquierdo
-                print('Botón inferior izquierdo presionado');
-              },
-              tooltip: 'Botón Izquierdo',
-              child: const Icon(Icons.menu), // Cambia el ícono según lo que necesites
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomRight, // Posiciona el botón en la esquina inferior derecha
-            child: FloatingActionButton(
-              onPressed: _incrementCounter,
-              tooltip: 'Increment',
-              child: const Icon(Icons.add),
-            ),
-          ),
-        ],
       ),
       endDrawer: Drawer(
         child: ListView(
