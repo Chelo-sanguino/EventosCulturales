@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'profile_settings.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,6 +44,25 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title), // Cambiado el título del AppBar
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: Image.asset(
+                'assets/chapaco_edit.JPG', // Ruta del ícono
+                width: 24, // Ajusta el tamaño del ícono
+                height: 24,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfileSettingsPage(),
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
       body: Center(
         child: Column(
@@ -60,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      endDrawer: Drawer(
+      drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
