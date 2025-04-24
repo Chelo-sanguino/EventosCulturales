@@ -122,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               padding: const EdgeInsets.all(20), // Espaciado interno
                             ),
                             child: Image.asset(
-                              'assets/chuncho.png', // Imagen del botón
+                              'assets/San_Roque.PNG', // Imagen del botón
                               width: 60,
                               height: 60,
                             ),
@@ -142,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               padding: const EdgeInsets.all(20), // Espaciado interno
                             ),
                             child: Image.asset(
-                              'assets/chuncho.png', // Imagen del botón
+                              'assets/rally-andaluz.png', // Imagen del botón
                               width: 60,
                               height: 60,
                             ),
@@ -169,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               padding: const EdgeInsets.all(20), // Espaciado interno
                             ),
                             child: Image.asset(
-                              'assets/chuncho.png', // Imagen del botón
+                              'assets/imagenes_uva.png', // Imagen del botón
                               width: 60,
                               height: 60,
                             ),

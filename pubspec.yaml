@@ -62,8 +62,9 @@ flutter:
    - assets/tarija_app.JPG
    - assets/chapaco_edit.JPG
    - assets/chuncho.png
-   - assets/cosecha-de-la-uva.JPG
-   - assets/rally-andaluz.JPEG
+   - assets/imagenes_uva.png
+   - assets/rally-andaluz.png
+   - assets/San_Roque.PNG
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
