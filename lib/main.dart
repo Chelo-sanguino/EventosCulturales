@@ -42,43 +42,169 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title), // Cambiado el título del AppBar
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: Image.asset(
-                'assets/chapaco_edit.JPG', // Ruta del ícono
-                width: 24, // Ajusta el tamaño del ícono
-                height: 24,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ProfileSettingsPage(),
-                  ),
-                );
-              },
-            );
-          },
+        backgroundColor: Colors.transparent, // Fondo transparente
+        elevation: 0, // Sin sombra
+        iconTheme: const IconThemeData(
+          color: Colors.white, // Cambia el color del ícono a blanco
         ),
+        actions: [
+          IconButton(
+            icon: Image.asset(
+              'assets/chapaco_edit.JPG', // Ruta del ícono
+              width: 44, // Ajusta el tamaño del ícono
+              height: 44,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProfileSettingsPage(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start, // Alinea los widgets al inicio
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 50.0), // Espaciado desde la parte superior
-              child: Image.asset(
-                'assets/tarija_app.JPG', // Ruta de la imagen en tu proyecto
-                width: 400, // Ajusta el ancho de la imagen
-                height: 350, // Ajusta la altura de la imagen
-                fit: BoxFit.cover, // Ajusta cómo se muestra la imagen
+      extendBodyBehindAppBar: true, // Extiende el cuerpo detrás del AppBar
+      body: Column(
+        children: [
+          // Imagen en la parte superior
+          Container(
+            height: MediaQuery.of(context).size.height * 0.5, // Ocupa el 50% de la pantalla
+            width: double.infinity,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/tarija_app.JPG'), // Ruta de la imagen
+                fit: BoxFit.cover, // La imagen cubre el área
               ),
             ),
-          ],
-        ),
+            child: Align(
+              alignment: Alignment.center, // Más centrado
+              child: Padding(
+                padding: const EdgeInsets.only(top: 150), // Ajusta la posición vertical
+                child: Text(
+                  'Eventos Culturales Tarija',
+                  style: TextStyle(
+                    color: Colors.white, // Texto en blanco
+                    fontSize: 28, // Tamaño del texto más grande
+                    fontWeight: FontWeight.bold, // Negrita
+                    shadows: [
+                      Shadow(
+                        blurRadius: 10.0, // Sombra del texto
+                        color: Colors.black,
+                        offset: Offset(2.0, 2.0),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // Parte inferior en blanco
+          Expanded(
+            child: Container(
+              color: Colors.white, // Fondo blanco
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Primera fila de botones
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              // Acción del botón
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: CircleBorder(), // Forma redonda
+                              padding: const EdgeInsets.all(20), // Espaciado interno
+                            ),
+                            child: Image.asset(
+                              'assets/chuncho.png', // Imagen del botón
+                              width: 60,
+                              height: 60,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text('Culturales'),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              // Acción del botón
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: CircleBorder(), // Forma redonda
+                              padding: const EdgeInsets.all(20), // Espaciado interno
+                            ),
+                            child: Image.asset(
+                              'assets/chuncho.png', // Imagen del botón
+                              width: 60,
+                              height: 60,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text('Deportivos'),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  // Segunda fila de botones
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              // Acción del botón
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: CircleBorder(), // Forma redonda
+                              padding: const EdgeInsets.all(20), // Espaciado interno
+                            ),
+                            child: Image.asset(
+                              'assets/chuncho.png', // Imagen del botón
+                              width: 60,
+                              height: 60,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text('Ferias'),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              // Acción del botón
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: CircleBorder(), // Forma redonda
+                              padding: const EdgeInsets.all(20), // Espaciado interno
+                            ),
+                            child: Image.asset(
+                              'assets/chuncho.png', // Imagen del botón
+                              width: 60,
+                              height: 60,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text('Calendario'),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
