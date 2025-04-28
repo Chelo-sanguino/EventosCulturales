@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'profile_settings.dart';
-
+import 'eventos_page.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -11,11 +11,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Eventos Culturales Tarija', // Cambiado el título de la aplicación
+      title: 'Eventos Culturales Tarija',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          primary: Colors.deepPurple,
+          secondary: Colors.amber,
+        ),
+        useMaterial3: true,
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.deepPurple,
+          ),
+        ),
       ),
-      home: const MyHomePage(title: 'Eventos Culturales Tarija'), // Cambiado el título de la página principal
+      home: const MyHomePage(title: 'Eventos Culturales Tarija'),
     );
   }
 }
@@ -30,29 +41,34 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  // Función para navegar a la página de eventos con la categoría seleccionada
+  void _navigateToEventos(String categoria) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EventosPage(categoria: categoria),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent, // Fondo transparente
-        elevation: 0, // Sin sombra
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         iconTheme: const IconThemeData(
-          color: Colors.white, // Cambia el color del ícono a blanco
+          color: Colors.white,
         ),
         actions: [
           IconButton(
-            icon: Image.asset(
-              'assets/chapaco_edit.JPG', // Ruta del ícono
-              width: 44, // Ajusta el tamaño del ícono
-              height: 44,
+            icon: ClipOval(
+              child: Image.asset(
+                'assets/chapaco_edit.JPG',
+                width: 44,
+                height: 44,
+                fit: BoxFit.cover,
+              ),
             ),
             onPressed: () {
               Navigator.push(
@@ -65,36 +81,48 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      extendBodyBehindAppBar: true, // Extiende el cuerpo detrás del AppBar
+      extendBodyBehindAppBar: true,
       body: Column(
         children: [
           // Imagen en la parte superior
           Container(
-            height: MediaQuery.of(context).size.height * 0.5, // Ocupa el 50% de la pantalla
+            height: MediaQuery.of(context).size.height * 0.5,
             width: double.infinity,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/tarija_app.JPG'), // Ruta de la imagen
-                fit: BoxFit.cover, // La imagen cubre el área
+                image: AssetImage('assets/tarija_app.JPG'),
+                fit: BoxFit.cover,
               ),
             ),
-            child: Align(
-              alignment: Alignment.center, // Más centrado
-              child: Padding(
-                padding: const EdgeInsets.only(top: 150), // Ajusta la posición vertical
-                child: Text(
-                  'Eventos Culturales Tarija',
-                  style: TextStyle(
-                    color: Colors.white, // Texto en blanco
-                    fontSize: 28, // Tamaño del texto más grande
-                    fontWeight: FontWeight.bold, // Negrita
-                    shadows: [
-                      Shadow(
-                        blurRadius: 10.0, // Sombra del texto
-                        color: Colors.black,
-                        offset: Offset(2.0, 2.0),
-                      ),
-                    ],
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withOpacity(0.3),
+                    Colors.black.withOpacity(0.5),
+                  ],
+                ),
+              ),
+              child: const Align(
+                alignment: Alignment.center,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 150),
+                  child: Text(
+                    'Eventos Culturales Tarija',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(
+                          blurRadius: 10.0,
+                          color: Colors.black,
+                          offset: Offset(2.0, 2.0),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -103,7 +131,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // Parte inferior en blanco
           Expanded(
             child: Container(
-              color: Colors.white, // Fondo blanco
+              color: Colors.white,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -111,45 +139,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Column(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              // Acción del botón
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: CircleBorder(), // Forma redonda
-                              padding: const EdgeInsets.all(20), // Espaciado interno
-                            ),
-                            child: Image.asset(
-                              'assets/San_Roque.PNG', // Imagen del botón
-                              width: 60,
-                              height: 60,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text('Culturales'),
-                        ],
+                      CategoryButton(
+                        image: 'assets/San_Roque.PNG',
+                        label: 'Culturales',
+                        onPressed: () => _navigateToEventos('Culturales'),
                       ),
-                      Column(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              // Acción del botón
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: CircleBorder(), // Forma redonda
-                              padding: const EdgeInsets.all(20), // Espaciado interno
-                            ),
-                            child: Image.asset(
-                              'assets/rally-andaluz.png', // Imagen del botón
-                              width: 60,
-                              height: 60,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text('Deportivos'),
-                        ],
+                      CategoryButton(
+                        image: 'assets/rally-andaluz.png',
+                        label: 'Deportivos',
+                        onPressed: () => _navigateToEventos('Deportivos'),
                       ),
                     ],
                   ),
@@ -158,45 +156,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Column(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              // Acción del botón
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: CircleBorder(), // Forma redonda
-                              padding: const EdgeInsets.all(20), // Espaciado interno
-                            ),
-                            child: Image.asset(
-                              'assets/imagenes_uva.png', // Imagen del botón
-                              width: 60,
-                              height: 60,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text('Ferias'),
-                        ],
+                      CategoryButton(
+                        image: 'assets/imagenes_uva.png',
+                        label: 'Ferias',
+                        onPressed: () => _navigateToEventos('Ferias'),
                       ),
-                      Column(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              // Acción del botón
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: CircleBorder(), // Forma redonda
-                              padding: const EdgeInsets.all(20), // Espaciado interno
-                            ),
-                            child: Image.asset(
-                              'assets/chuncho.png', // Imagen del botón
-                              width: 60,
-                              height: 60,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text('Calendario'),
-                        ],
+                      CategoryButton(
+                        image: 'assets/chuncho.png',
+                        label: 'Calendario',
+                        onPressed: () => _navigateToEventos('Calendario'),
                       ),
                     ],
                   ),
@@ -213,12 +181,25 @@ class _MyHomePageState extends State<MyHomePage> {
             DrawerHeader(
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
+                image: const DecorationImage(
+                  image: AssetImage('assets/tarija_app.JPG'),
+                  fit: BoxFit.cover,
+                  opacity: 0.7,
+                ),
               ),
               child: const Text(
                 'Menú',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  shadows: [
+                    Shadow(
+                      blurRadius: 5.0,
+                      color: Colors.black,
+                      offset: Offset(1.0, 1.0),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -234,6 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
               title: const Text('Eventos'),
               onTap: () {
                 Navigator.pop(context);
+                _navigateToEventos('Todos');
               },
             ),
             ListTile(
@@ -241,11 +223,60 @@ class _MyHomePageState extends State<MyHomePage> {
               title: const Text('Configuración'),
               onTap: () {
                 Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfileSettingsPage(),
+                  ),
+                );
               },
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+// Widget para botones de categoría reutilizables
+class CategoryButton extends StatelessWidget {
+  final String image;
+  final String label;
+  final VoidCallback onPressed;
+
+  const CategoryButton({
+    super.key,
+    required this.image,
+    required this.label,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            shape: const CircleBorder(),
+            padding: const EdgeInsets.all(20),
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            elevation: 4,
+          ),
+          child: Image.asset(
+            image,
+            width: 60,
+            height: 60,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
     );
   }
 }

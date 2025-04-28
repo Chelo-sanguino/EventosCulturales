@@ -65,6 +65,8 @@ flutter:
    - assets/imagenes_uva.png
    - assets/rally-andaluz.png
    - assets/San_Roque.PNG
+   - assets/logo_carnaval.png
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
