@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "77773812312",
+    "project_id": "eventos-culturales-f03c8",
+    "storage_bucket": "eventos-culturales-f03c8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:77773812312:android:4eb04f546e1c3562fa102d",
+        "android_client_info": {
+          "package_name": "com.example.eventos_culturales"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "77773812312-umfk69q6m19rlrr2kj78dm5gobnn1iis.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eventos_culturales",
+            "certificate_hash": "60db48933400bd9e03455dddb649b499c435102d"
+          }
+        },
+        {
+          "client_id": "77773812312-chl67o5gr5grn9ce01n7ocu226ql4n1e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC76QlOVsGc5VwoRn3IoVAA4_6FWUW8RAA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "77773812312-chl67o5gr5grn9ce01n7ocu226ql4n1e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "77773812312-i9me817kmaalh8t1moneg0kmkgp97ek9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.eventosCulturales"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
