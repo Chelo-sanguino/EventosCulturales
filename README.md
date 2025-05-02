@@ -9,7 +9,7 @@
 
 ## 🖼️ Vista previa
 
-![Preview del sitio](ruta/a/una/imagen-o-gif.gif)
+![Preview del sitio](assets/logo_carnaval.png)
 
 ---
 
