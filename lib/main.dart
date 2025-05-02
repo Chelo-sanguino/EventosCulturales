@@ -1,8 +1,16 @@
+import 'package:eventos_culturales/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'profile_settings.dart';
 import 'eventos_page.dart';
+import 'screens/login_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Inicializa Firebase antes de ejecutar la aplicación
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -20,14 +28,8 @@ class MyApp extends StatelessWidget {
           secondary: Colors.amber,
         ),
         useMaterial3: true,
-        textTheme: const TextTheme(
-          titleLarge: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.deepPurple,
-          ),
-        ),
       ),
-      home: const MyHomePage(title: 'Eventos Culturales Tarija'),
+      home: const LoginScreen(),
     );
   }
 }
