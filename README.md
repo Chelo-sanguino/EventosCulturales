@@ -7,7 +7,7 @@
 
 ---
 
-## 🖼️ Vista previa
+## 🖼️ Logo de Aplicacion
 
 ![Preview del sitio](assets/logo_carnaval.png)
 
