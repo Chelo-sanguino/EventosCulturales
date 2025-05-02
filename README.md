@@ -8,14 +8,6 @@
 
 ---
 
-## 🎬 Vista previa
-
-<p align="center">
-  <img src="ruta/a/preview.gif" alt="Vista previa de la app" width="600"/>
-</p>
-
----
-
 ## 📖 Tabla de contenidos
 
 - [📖 Introducción](#📖-introducción)
