@@ -1,16 +1,27 @@
-import 'package:eventos_culturales/firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'profile_settings.dart';
 import 'eventos_page.dart';
 import 'screens/login_screen.dart';
+import 'services/auth_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Inicializa Firebase antes de ejecutar la aplicación
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  
+  try {
+    // Inicializa Firebase antes de ejecutar la aplicación
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    print('Firebase inicializado correctamente');
+  } catch (e) {
+    print('Error al inicializar Firebase: $e');
+    // Continuar con la aplicación aunque Firebase falle,
+    // el usuario verá errores más descriptivos en la pantalla de login
+  }
+  
   runApp(const MyApp());
 }
 
@@ -21,6 +32,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Eventos Culturales Tarija',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.deepPurple,
@@ -29,8 +41,25 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const LoginScreen(),
+      home: const LoginScreenWrapper(),
     );
+  }
+}
+
+// Esta clase verifica si hay un usuario autenticado para decidir qué pantalla mostrar
+class LoginScreenWrapper extends StatelessWidget {
+  const LoginScreenWrapper({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final AuthService authService = AuthService();
+    
+    // Verificar si hay un usuario autenticado
+    if (authService.isUserLoggedIn()) {
+      return const MyHomePage(title: 'Eventos Culturales Tarija');
+    } else {
+      return const LoginScreen();
+    }
   }
 }
 
@@ -44,6 +73,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final AuthService _authService = AuthService();
+  
   // Función para navegar a la página de eventos con la categoría seleccionada
   void _navigateToEventos(String categoria) {
     Navigator.push(
@@ -52,6 +83,22 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context) => EventosPage(categoria: categoria),
       ),
     );
+  }
+
+  void _cerrarSesion() async {
+    try {
+      await _authService.signOut();
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al cerrar sesión: $e')),
+      );
+    }
   }
 
   @override
@@ -231,6 +278,38 @@ class _MyHomePageState extends State<MyHomePage> {
                   MaterialPageRoute(
                     builder: (context) => const ProfileSettingsPage(),
                   ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title: const Text('Cerrar Sesión', style: TextStyle(color: Colors.red)),
+              onTap: () {
+                Navigator.pop(context);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Cerrar Sesión'),
+                      content: const Text('¿Estás seguro que deseas cerrar sesión?'),
+                      actions: [
+                        TextButton(
+                          child: const Text('Cancelar'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: const Text('Sí, cerrar sesión'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            _cerrarSesion();
+                          },
+                        ),
+                      ],
+                    );
+                  },
                 );
               },
             ),
