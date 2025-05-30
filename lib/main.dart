@@ -6,20 +6,18 @@ import 'profile_settings.dart';
 import 'eventos_page.dart';
 import 'screens/login_screen.dart';
 import 'services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   try {
-    // Inicializa Firebase antes de ejecutar la aplicación
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
     print('Firebase inicializado correctamente');
   } catch (e) {
     print('Error al inicializar Firebase: $e');
-    // Continuar con la aplicación aunque Firebase falle,
-    // el usuario verá errores más descriptivos en la pantalla de login
   }
   
   runApp(const MyApp());
@@ -41,25 +39,51 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
+      // Usar LoginScreenWrapper como pantalla inicial
       home: const LoginScreenWrapper(),
     );
   }
 }
 
-// Esta clase verifica si hay un usuario autenticado para decidir qué pantalla mostrar
+// Wrapper para manejar el estado de autenticación
 class LoginScreenWrapper extends StatelessWidget {
   const LoginScreenWrapper({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final AuthService authService = AuthService();
-    
-    // Verificar si hay un usuario autenticado
-    if (authService.isUserLoggedIn()) {
-      return const MyHomePage(title: 'Eventos Culturales Tarija');
-    } else {
-      return const LoginScreen();
-    }
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        // Mostrar indicador de carga mientras se verifica el estado
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+
+        // Manejar errores
+        if (snapshot.hasError) {
+          return Scaffold(
+            body: Center(
+              child: Text('Error: ${snapshot.error}'),
+            ),
+          );
+        }
+
+        // Verificar el estado de autenticación
+        if (snapshot.hasData && snapshot.data != null) {
+          // Usuario autenticado
+          print('Usuario autenticado: ${snapshot.data?.email}');
+          return const MyHomePage(title: 'Eventos Culturales Tarija');
+        } else {
+          // Usuario no autenticado
+          print('Usuario no autenticado');
+          return const LoginScreen();
+        }
+      },
+    );
   }
 }
 

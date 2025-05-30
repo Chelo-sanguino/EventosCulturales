@@ -278,7 +278,15 @@ class _EventosPageState extends State<EventosPage> {
     final titleController = TextEditingController(text: evento?['titulo'] ?? '');
     final descriptionController = TextEditingController(text: evento?['descripcion'] ?? '');
     final locationController = TextEditingController(text: evento?['ubicacion'] ?? '');
-    String selectedCategory = evento?['categoria'] ?? widget.categoria;
+    String selectedCategory = evento?['categoria'] ?? 'Culturales';
+    // Lista de categorías disponibles
+    final List<String> categorias = ['Culturales', 'Deportivos', 'Ferias'];
+    
+    // Si la categoría no está en la lista, usar la primera categoría
+    if (!categorias.contains(selectedCategory)) {
+      selectedCategory = categorias[0];
+    }
+    
     DateTime selectedDate = DateTime.now();
     
     // Si estamos editando y hay fecha, usarla
@@ -336,8 +344,7 @@ class _EventosPageState extends State<EventosPage> {
                         labelText: 'Categoría',
                         border: OutlineInputBorder(),
                       ),
-                      items: ['Culturales', 'Deportivos', 'Ferias']
-                          .map((String value) {
+                      items: categorias.map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),

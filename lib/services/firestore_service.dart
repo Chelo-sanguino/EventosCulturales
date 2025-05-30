@@ -54,15 +54,18 @@ class FirestoreService {
       return obtenerEventos();
     }
     
+    print('Buscando eventos de categoría: $categoria'); // Agregar debug print
+    
     return _firestore
         .collection('eventos')
         .where('categoria', isEqualTo: categoria)
-        .orderBy('fechaEvento', descending: false)
         .snapshots()
         .map((snapshot) {
+      print('Eventos encontrados: ${snapshot.docs.length}'); // Agregar debug print
       return snapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data();
         data['id'] = doc.id;
+        print('Evento: ${data['titulo']} - Categoría: ${data['categoria']}'); // Debug
         return data;
       }).toList();
     });

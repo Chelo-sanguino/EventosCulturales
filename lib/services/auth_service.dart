@@ -9,18 +9,31 @@ class AuthService {
   // Iniciar sesión con correo y contraseña
   Future<Map<String, dynamic>> signInWithEmailAndPassword(String email, String password) async {
     try {
-      final userCredential = await _auth.signInWithEmailAndPassword(
+      // Realizar la autenticación
+      final UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return {
-        'success': true,
-        'user': userCredential.user,
-        'message': 'Inicio de sesión exitoso'
-      };
+
+      // Verificar si el usuario existe
+      if (userCredential.user != null) {
+        // Devolver solo los datos necesarios, no el objeto User completo
+        return {
+          'success': true,
+          'message': 'Inicio de sesión exitoso',
+          'data': {
+            'uid': userCredential.user?.uid,
+            'email': userCredential.user?.email,
+          }
+        };
+      } else {
+        return {
+          'success': false,
+          'message': 'Error al iniciar sesión: usuario no encontrado'
+        };
+      }
     } on FirebaseAuthException catch (e) {
-      String message = 'Error desconocido al iniciar sesión';
-      
+      String message;
       switch (e.code) {
         case 'user-not-found':
           message = 'No existe usuario con este correo electrónico';
@@ -29,35 +42,24 @@ class AuthService {
           message = 'Contraseña incorrecta';
           break;
         case 'invalid-email':
-          message = 'Correo electrónico con formato inválido';
+          message = 'Correo electrónico inválido';
           break;
         case 'user-disabled':
           message = 'Esta cuenta ha sido deshabilitada';
           break;
-        case 'too-many-requests':
-          message = 'Demasiados intentos fallidos. Intente más tarde';
-          break;
-        case 'operation-not-allowed':
-          message = 'Inicio de sesión con correo y contraseña no habilitado';
-          break;
-        case 'network-request-failed':
-          message = 'Error de conexión. Verifique su conexión a internet';
-          break;
+        default:
+          message = 'Error al iniciar sesión: ${e.message}';
       }
-      
-      print('Error de autenticación: ${e.code} - $message');
+      print('Error de autenticación: $message');
       return {
         'success': false,
-        'user': null,
-        'message': message,
-        'code': e.code
+        'message': message
       };
     } catch (e) {
-      print('Error inesperado al iniciar sesión: $e');
+      print('Error inesperado en signInWithEmailAndPassword: $e');
       return {
         'success': false,
-        'user': null,
-        'message': 'Error inesperado: $e'
+        'message': 'Error inesperado al iniciar sesión'
       };
     }
   }
@@ -65,65 +67,70 @@ class AuthService {
   // Registrar nuevo usuario
   Future<Map<String, dynamic>> registerWithEmailAndPassword(String email, String password) async {
     try {
-      final userCredential = await _auth.createUserWithEmailAndPassword(
+      final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return {
-        'success': true,
-        'user': userCredential.user,
-        'message': 'Usuario registrado exitosamente'
-      };
+
+      if (userCredential.user != null) {
+        return {
+          'success': true,
+          'message': 'Usuario registrado exitosamente',
+          'data': {
+            'uid': userCredential.user?.uid,
+            'email': userCredential.user?.email,
+          }
+        };
+      } else {
+        return {
+          'success': false,
+          'message': 'Error al registrar usuario'
+        };
+      }
     } on FirebaseAuthException catch (e) {
-      String message = 'Error desconocido al registrar usuario';
-      
+      String message;
       switch (e.code) {
         case 'email-already-in-use':
-          message = 'Este correo electrónico ya está registrado';
-          break;
-        case 'invalid-email':
-          message = 'Correo electrónico con formato inválido';
+          message = 'Este correo ya está registrado';
           break;
         case 'weak-password':
-          message = 'La contraseña es demasiado débil';
+          message = 'La contraseña es muy débil';
           break;
-        case 'operation-not-allowed':
-          message = 'Registro con correo y contraseña no habilitado';
+        case 'invalid-email':
+          message = 'Correo electrónico inválido';
           break;
-        case 'network-request-failed':
-          message = 'Error de conexión. Verifique su conexión a internet';
-          break;
+        default:
+          message = 'Error al registrar: ${e.message}';
       }
-      
-      print('Error de registro: ${e.code} - $message');
       return {
         'success': false,
-        'user': null,
-        'message': message,
-        'code': e.code
+        'message': message
       };
     } catch (e) {
-      print('Error inesperado al registrar: $e');
+      print('Error inesperado en registerWithEmailAndPassword: $e');
       return {
         'success': false,
-        'user': null,
-        'message': 'Error inesperado: $e'
+        'message': 'Error inesperado al registrar usuario'
       };
     }
   }
 
-  // Verificar si el usuario actual está autenticado
+  // Cerrar sesión
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      print('Error al cerrar sesión: $e');
+      throw Exception('Error al cerrar sesión');
+    }
+  }
+
+  // Verificar si hay un usuario autenticado
   bool isUserLoggedIn() {
     return _auth.currentUser != null;
   }
 
-  // Obtener el usuario actual
   User? getCurrentUser() {
     return _auth.currentUser;
-  }
-
-  // Cerrar sesión
-  Future<void> signOut() async {
-    await _auth.signOut();
   }
 }
