@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// Wrapper para manejar el estado de autenticación
+// Wrapper para manejar el estado de autenticación - CORREGIDO
 class LoginScreenWrapper extends StatelessWidget {
   const LoginScreenWrapper({Key? key}) : super(key: key);
 
@@ -65,21 +65,22 @@ class LoginScreenWrapper extends StatelessWidget {
 
         // Manejar errores
         if (snapshot.hasError) {
-          return Scaffold(
-            body: Center(
-              child: Text('Error: ${snapshot.error}'),
-            ),
-          );
+          print('Error en authStateChanges: ${snapshot.error}');
+          return const LoginScreen(); // En caso de error, mostrar login
         }
 
-        // Verificar el estado de autenticación
-        if (snapshot.hasData && snapshot.data != null) {
-          // Usuario autenticado
-          print('Usuario autenticado: ${snapshot.data?.email}');
+        // Verificar el estado de autenticación de manera más robusta
+        final user = snapshot.data;
+        if (user != null) {
+          // Verificar que el usuario esté realmente autenticado
+          print('Usuario detectado: ${user.email}, UID: ${user.uid}');
+          print('Email verificado: ${user.emailVerified}');
+          
+          // Solo mostrar la página principal si el usuario está realmente autenticado
           return const MyHomePage(title: 'Eventos Culturales Tarija');
         } else {
           // Usuario no autenticado
-          print('Usuario no autenticado');
+          print('No hay usuario autenticado');
           return const LoginScreen();
         }
       },
@@ -111,17 +112,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _cerrarSesion() async {
     try {
+      print('Cerrando sesión...');
       await _authService.signOut();
+      print('Sesión cerrada correctamente');
+      
       if (mounted) {
-        Navigator.pushReplacement(
+        // Usar pushAndRemoveUntil para limpiar toda la pila de navegación
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const LoginScreen()),
+          (route) => false, // Esto elimina todas las rutas anteriores
         );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error al cerrar sesión: $e')),
-      );
+      print('Error al cerrar sesión: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error al cerrar sesión: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 

@@ -116,6 +116,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 : () {
                                     setState(() {
                                       _isRegistering = !_isRegistering;
+                                      // Limpiar los campos al cambiar de modo
+                                      _emailController.clear();
+                                      _passwordController.clear();
                                     });
                                   },
                             child: Text(
@@ -150,53 +153,63 @@ class _LoginScreenState extends State<LoginScreen> {
       final email = _emailController.text.trim();
       final password = _passwordController.text;
 
+      print('Intentando ${_isRegistering ? 'registrar' : 'iniciar sesión'} con: $email');
+
       Map<String, dynamic> result;
       
       if (_isRegistering) {
         // Registrar usuario
         result = await _authService.registerWithEmailAndPassword(email, password);
+        print('Resultado del registro: $result');
       } else {
         // Iniciar sesión
         result = await _authService.signInWithEmailAndPassword(email, password);
+        print('Resultado del inicio de sesión: $result');
       }
 
       if (result['success']) {
         if (_isRegistering) {
           // Si acaba de registrarse, mostrar mensaje y cambiar a pantalla de inicio de sesión
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(result['message'] ?? 'Usuario registrado con éxito')),
-          );
-          setState(() {
-            _isRegistering = false;
-          });
-        } else {
-          // Si inició sesión exitosamente, navegar a la página principal
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MyHomePage(
-                title: 'Eventos Culturales Tarija',
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(result['message'] ?? 'Usuario registrado con éxito. Ahora puedes iniciar sesión.'),
+                backgroundColor: Colors.green,
               ),
-            ),
-          );
+            );
+            setState(() {
+              _isRegistering = false;
+              _emailController.clear();
+              _passwordController.clear();
+            });
+          }
+        } else {
+          // Si inició sesión exitosamente, el StreamBuilder se encargará de la navegación
+          print('Inicio de sesión exitoso. El StreamBuilder debería detectar el cambio.');
+          // NO navegamos manualmente aquí, el StreamBuilder lo hará automáticamente
         }
       } else {
         // Mostrar mensaje de error
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(result['message'] ?? 'Error de autenticación'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      print('Error inesperado en _handleAuthAction: $e');
+      // Manejar errores inesperados
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(result['message'] ?? 'Error de autenticación'),
+            content: Text('Error inesperado: $e'),
             backgroundColor: Colors.red,
           ),
         );
       }
-    } catch (e) {
-      // Manejar errores inesperados
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error inesperado: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
     } finally {
       // Independientemente del resultado, detener el indicador de carga
       if (mounted) {
