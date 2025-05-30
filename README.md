@@ -1,4 +1,4 @@
-# 🎭 Eventos Culturales Tarija 🇧🇴
+# 🎭 Eventura Tarija 🇧🇴
 
 > Plataforma móvil para descubrir, compartir y asistir a eventos culturales en la ciudad de Tarija, Bolivia.
 
